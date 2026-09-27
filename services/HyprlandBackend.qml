@@ -53,6 +53,11 @@ Scope {
         return HyprlandData.biggestWindowForWorkspace(wsId);
     }
 
+    function hasWindowsOnMonitor(monitorName) {
+        const wsList = Hyprland.workspaces.values.filter(ws => ws.monitor && ws.monitor.name === monitorName);
+        return wsList.some(ws => ws.active && ws.toplevels.values.length > 0);
+    }
+
     function fullscreenOnMonitor(monitorName) {
         const wsList = Hyprland.workspaces.values.filter(ws => ws.monitor && ws.monitor.name === monitorName);
         return wsList.some(ws => ws.active && ws.toplevels.values.some(w => w.wayland?.fullscreen));

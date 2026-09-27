@@ -27,8 +27,11 @@ Scope {
 
             property var monitor: WM.monitorFor(modelData)
             property bool fullscreenOnThisMonitor: WM.fullscreenOnMonitor(monitor?.name)
+            property bool hasWindowsOnThisMonitor: WM.hasWindowsOnMonitor(monitor?.name)
 
             property bool reveal: {
+                if (!hasWindowsOnThisMonitor)
+                    return true
                 if (fullscreenOnThisMonitor)
                     return Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse
                 return root.pinned
