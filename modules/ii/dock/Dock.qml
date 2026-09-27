@@ -17,7 +17,7 @@ Scope {
     property bool pinned: Config.options?.dock.pinnedOnStartup ?? false
 
     Variants {
-        model: Quickshell.screens
+        model: Quickshell.screens.filter(s => s.name === "DP-1")
 
         PanelWindow {
             id: dockRoot
