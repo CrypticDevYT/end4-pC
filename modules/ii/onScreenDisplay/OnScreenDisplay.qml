@@ -13,6 +13,7 @@ import Quickshell.Hyprland
 Scope {
     id: root
     property string protectionMessage: ""
+    property bool capsLockOn: false
     property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
 
     property string currentIndicator: "volume"
@@ -29,6 +30,10 @@ Scope {
         {
             id: "gamma",
             sourceUrl: "indicators/GammaIndicator.qml"
+        },
+        {
+            id: "capslock",
+            sourceUrl: "indicators/CapsLockIndicator.qml"
         },
     ]
 
@@ -160,6 +165,13 @@ Scope {
                             source: root.indicators.find(i => i.id === root.currentIndicator)?.sourceUrl
                         }
 
+                        Binding {
+                            target: osdIndicatorLoader.item
+                            property: "capsOn"
+                            value: root.capsLockOn
+                            when: root.currentIndicator === "capslock" && osdIndicatorLoader.item !== null
+                        }
+
                         Item {
                             id: protectionMessageWrapper
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -219,6 +231,18 @@ Scope {
             GlobalStates.osdVolumeOpen = !GlobalStates.osdVolumeOpen;
         }
     }
+
+    IpcHandler {
+        target: "osdCapsLock"
+
+        function trigger(on: bool): void {
+            root.protectionMessage = "";
+            root.capsLockOn = on;
+            root.currentIndicator = "capslock";
+            root.triggerOsd();
+        }
+    }
+
     CompositorGlobalShortcut {
         name: "osdVolumeTrigger"
         description: "Triggers volume OSD on press"

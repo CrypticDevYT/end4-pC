@@ -11,6 +11,8 @@ Item {
     required property string name
     property bool rotateIcon: false
     property bool scaleIcon: false
+    property string displayText: ""
+    property bool showSlider: true
     property alias from: valueProgressBar.from
     property alias to: valueProgressBar.to
 
@@ -60,14 +62,31 @@ Item {
                 }
             }
 
-            StyledSlider {
-                id: valueProgressBar
+            // Middle area: keeps the slider's size even when the slider is hidden
+            Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.alignment: Qt.AlignVCenter
-                configuration: StyledSlider.Configuration.M
-                stopIndicatorValues: []
-                value: root.value
+                implicitHeight: valueProgressBar.implicitHeight
+
+                StyledSlider {
+                    id: valueProgressBar
+                    anchors.fill: parent
+                    visible: root.showSlider
+                    configuration: StyledSlider.Configuration.M
+                    stopIndicatorValues: []
+                    value: root.value
+                }
+
+                StyledText {
+                    visible: !root.showSlider
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 4
+                    color: Appearance.colors.colOnLayer0
+                    font.pixelSize: Appearance.font.pixelSize.normal
+                    text: root.name
+                }
             }
 
             Rectangle {
@@ -85,7 +104,7 @@ Item {
                     font.pixelSize: Appearance.font.pixelSize.normal
                     font.features: { "tnum": 1 }
                     font.letterSpacing: 0.2
-                    text: Math.round(root.value * 100)
+                    text: root.displayText !== "" ? root.displayText : Math.round(root.value * 100)
                 }
             }
         }

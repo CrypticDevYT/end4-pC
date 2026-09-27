@@ -324,7 +324,7 @@ Item {
                             entry.toplevels[next].activate()
                         }
                         middleClickAction: () => { slotItem.deskEntry?.execute() }
-                        altAction:         () => { TaskbarApps.togglePin(slotItem.appId) }
+                        altAction:         () => { }
 
                         contentItem: Item {
                             anchors.centerIn: parent
