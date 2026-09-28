@@ -25,6 +25,15 @@ Item {
     property real windowControlsHeight: 30
     property Item lastHoveredButton: null
     property bool buttonHovered: false
+
+    CompositorGlobalShortcut {
+        name: "dockTogglePin"
+        description: "Toggle pin on the hovered dock icon"
+        onPressed: {
+            if (root.buttonHovered && root.lastHoveredButton)
+                TaskbarApps.togglePin(root.lastHoveredButton.appId)
+        }
+    }
     property bool requestDockShow: previewPopup.show
     signal orderChanged(var newOrder)
     property var  _workOrder: pinnedApps.slice()
@@ -144,6 +153,7 @@ Item {
                 anchors.fill: parent
 
                 property var appToplevel: slotItem.appEntry
+                property string appId: slotItem.appId
 
                 topInset:    Appearance.sizes.hyprlandGapsOut + 8
                 bottomInset: Appearance.sizes.hyprlandGapsOut + 8
